@@ -5,7 +5,11 @@ import passport from "passport";
 const router = express.Router();
 
 function isLoggedIn(req: any, res: any, next: any) {
-  req.user ? next() : res.status(401);
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.status(401).send({ error: "Unauthorized" });
+  }
 }
 
 // Health check route
@@ -24,14 +28,14 @@ router.get(
 
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "http://localhost:3001/protected",
-    failureRedirect: "/auth/google/failure",
-  })
+  passport.authenticate("google"),
+  (req: Request, res: Response) => {
+    res.send({ success: true, user: req.user });
+  }
 );
 
 router.get("/protected", isLoggedIn, (req: Request, res: Response) => {
-  console.log(req.user)
+  console.log(req.user);
   res.send({ success: "Hello world!", data: req.user });
 });
 
