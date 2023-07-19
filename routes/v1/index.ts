@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Auth } from "../../handlers/auth";
+// import { Auth } from "../../handlers/auth";
 import passport from "passport";
 
 const router = express.Router();
@@ -18,8 +18,8 @@ router.get("/healthcheck", (req: Request, res: Response) => {
 });
 
 /*** Auth endpoints ***/
-router.post("/signup", Auth.signup);
-router.get("/signin", Auth.signin);
+// router.post("/signup", Auth.signup);
+// router.get("/signin", Auth.signin);
 
 router.get(
   "/auth/google",

@@ -1,18 +1,20 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model } from "mongoose";
 
 export interface IAccount {
   id: number;
+  profileId: number;
   name: string;
   email: string;
-  password: string;
+  profilePicture: string;
 }
 
 const accountSchema = new Schema<IAccount>(
   {
     id: Number,
+    profileId: Number,
     name: String,
     email: String,
-    password: String,
+    profilePicture: String,
   },
   {
     timestamps: true,

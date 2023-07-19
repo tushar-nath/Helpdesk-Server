@@ -1,6 +1,8 @@
 import passport, { use } from "passport";
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 import dotenv from "dotenv";
+import { Account } from "../models/account";
+import clientPromise from "../lib/mongo";
 
 dotenv.config();
 
@@ -15,16 +17,38 @@ passport.use(
       callbackURL: "http://localhost:3000/api/v1/auth/google/callback",
       passReqToCallback: true,
     },
-    function (
+    async function (
       request: any,
       accessToken: any,
       refreshToken: any,
       profile: any,
       done: any
     ) {
-      console.log("this is the goddamn user - ", profile);
-      request.session.userToken = accessToken;
-      done(null, profile);
+      try {
+        await clientPromise;
+        // Check if the user already exists in the database based on the Google ID
+        const existingUser = await Account.findOne({
+          profileId: profile.id,
+        }).exec();
+
+        if (existingUser) {
+          console.log("existing user: ", existingUser);
+          done(null, existingUser); // Return the existing user
+        } else {
+          // If the user does not exist, create a new user record in the database
+          const newUser = new Account({
+            profileId: profile.id,
+            name: profile.displayName,
+            email: profile.email,
+            profilePicture: profile.picture,
+          });
+          await newUser.save();
+          console.log("new user is", newUser);
+          done(null, newUser); // Return the newly created user
+        }
+      } catch (error) {
+        done(error, null); // If an error occurs, pass it to done callback with null user
+      }
     }
   )
 );
