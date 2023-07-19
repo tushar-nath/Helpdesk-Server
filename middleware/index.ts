@@ -41,6 +41,7 @@ passport.use(
             name: profile.displayName,
             email: profile.email,
             profilePicture: profile.picture,
+            accessToken: accessToken,
           });
           await newUser.save();
           console.log("new user is", newUser);

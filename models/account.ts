@@ -6,6 +6,7 @@ export interface IAccount {
   name: string;
   email: string;
   profilePicture: string;
+  accessToken: string;
 }
 
 const accountSchema = new Schema<IAccount>(
@@ -15,6 +16,7 @@ const accountSchema = new Schema<IAccount>(
     name: String,
     email: String,
     profilePicture: String,
+    accessToken: String,
   },
   {
     timestamps: true,
