@@ -7,9 +7,8 @@ import passport from "passport";
 
 const app = express();
 
-// Enable CORS
-// Enable CORS with credentials
-app.use(cors({ origin: "http://192.168.1.3:3001", credentials: true }));
+// Enable CORS for all routes
+app.use(cors());
 
 app.use(express.json());
 
