@@ -18,7 +18,9 @@ passport.use(
       passReqToCallback: true,
     },
     async function (
+      request: any,
       accessToken: any,
+      refreshToken: any,
       profile: any,
       done: any
     ) {
