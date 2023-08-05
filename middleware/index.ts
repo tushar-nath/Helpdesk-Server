@@ -8,13 +8,14 @@ dotenv.config();
 
 const client_id = process.env.GOOGLE_CLIENT_ID as string;
 const client_secret = process.env.GOOGLE_CLIENT_SECRET as string;
+const baseUrl = process.env.REACT_APP_URL as string;
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: client_id,
       clientSecret: client_secret,
-      callbackURL: "http://localhost:3000/api/v1/auth/google/callback",
+      callbackURL: `${baseUrl}/api/v1/auth/google/callback`,
       passReqToCallback: true,
     },
     async function (
