@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IAccount } from "../../models/account";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const baseUrl = process.env.REACT_APP_URL as string;
 export class Auth {
   static signin(req: Request, res: Response) {
     try {
@@ -14,7 +19,7 @@ export class Auth {
       const options = { expiresIn: "1h" };
       const token = jwt.sign(payload, secretKey, options);
 
-      res.redirect(`http://localhost:3001/dashboard?token=${token}`);
+      res.redirect(`${baseUrl}/dashboard?token=${token}`);
     } catch (error) {
       res.status(400).json("error");
     }
