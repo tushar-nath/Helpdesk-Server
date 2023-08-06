@@ -16,7 +16,7 @@ export class Auth {
         name: account.name,
       };
       const secretKey = "helloworld";
-      const options = { expiresIn: "1h" };
+      const options = { expiresIn: "12h" };
       const token = jwt.sign(payload, secretKey, options);
 
       res.redirect(`${baseUrl}/dashboard?token=${token}`);

@@ -1,32 +1,30 @@
 import { Schema, model } from "mongoose";
 
 export interface ITicket {
-  id: number;
+  save(): unknown;
+  _id: string;
+  assigneeId: string;
   title: string;
   description: string;
-  type: string;
   status: string;
-  priority: string;
-  assignee: string;
-  approver: string;
-  comments: string;
+  taskColumn: string;
+  dueDate: Date;
+  reporterId?: string;
 }
 
 const ticketSchema = new Schema<ITicket>(
   {
-    id: Number,
+    assigneeId: String,
     title: String,
     description: String,
-    type: String,
     status: String,
-    priority: String,
-    assignee: String,
-    approver: String,
-    comments: String,
+    taskColumn: String,
+    dueDate: Date,
+    reporterId: String,
   },
   {
     timestamps: true,
   }
 );
 
-export const Ticket = model<ITicket>("Account", ticketSchema);
+export const Ticket = model<ITicket>("Ticket", ticketSchema);
