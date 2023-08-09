@@ -74,15 +74,45 @@ export class TicketHandler {
 
   static async updateTicket(req: Request, res: Response) {
     try {
-      const { ticketId, taskColumn } = req.body;
-      const ticket = await TicketService.getTicketById(ticketId);
+      const {
+        ticketId,
+        assigneeId,
+        title,
+        description,
+        status,
+        taskColumn,
+        dueDate,
+      } = req.body;
+
+      const ticket: any = await TicketService.getTicketById(ticketId);
+
+      console.log(ticket);
+
       if (!ticket) {
-        return res.status(400).json("error");
+        return res.status(400).json({ error: "Ticket not found" });
       }
-      ticket.taskColumn = taskColumn;
-      ticket.save();
-      res.status(200).json(ticket);
+
+      const fieldsToUpdate: any = {
+        assigneeId,
+        title,
+        description,
+        status,
+        taskColumn,
+        dueDate,
+      };
+
+      for (const field in fieldsToUpdate) {
+        if (fieldsToUpdate[field] !== undefined) {
+          ticket[field] = fieldsToUpdate[field];
+        }
+      }
+
+      await ticket.save();
+
+      console.log("updated ticket is", ticket);
+      res.status(200).json({ savedTicket: ticket });
     } catch (error) {
+      console.error("error is: ", error);
       res.status(400).json({ error: error });
     }
   }
