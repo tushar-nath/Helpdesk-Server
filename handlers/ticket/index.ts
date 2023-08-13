@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import clientPromise from "../../lib/mongo";
-import { ITicket, Ticket } from "../../models/ticket";
+import { IComment, ITicket, Ticket } from "../../models/ticket";
 import { TicketService } from "../../service/ticket";
 
 export class TicketHandler {
@@ -82,9 +82,11 @@ export class TicketHandler {
         status,
         taskColumn,
         dueDate,
+        comment,
+        username,
       } = req.body;
 
-      const ticket: any = await TicketService.getTicketById(ticketId);
+      const ticket: ITicket | any = await TicketService.getTicketById(ticketId);
 
       console.log(ticket);
 
@@ -107,9 +109,16 @@ export class TicketHandler {
         }
       }
 
-      await ticket.save();
+      if (comment) {
+        const newComment: IComment = {
+          username,
+          comment: comment,
+        };
+        ticket.comments.push(newComment);
+      }
 
-      console.log("updated ticket is", ticket);
+      await ticket.save();
+      
       res.status(200).json({ savedTicket: ticket });
     } catch (error) {
       console.error("error is: ", error);

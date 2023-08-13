@@ -1,5 +1,17 @@
 import { Schema, model } from "mongoose";
 
+export interface IComment {
+  username: string;
+  comment: string;
+}
+
+const CommentSchema = new Schema<IComment>(
+  {
+    username: String,
+    comment: String,
+  },
+  { _id: false, timestamps: true }
+);
 export interface ITicket {
   save(): unknown;
   _id: string;
@@ -10,6 +22,7 @@ export interface ITicket {
   taskColumn: string;
   dueDate: Date;
   reporterId?: string;
+  comments?: IComment[];
 }
 
 const ticketSchema = new Schema<ITicket>(
@@ -21,6 +34,7 @@ const ticketSchema = new Schema<ITicket>(
     taskColumn: String,
     dueDate: Date,
     reporterId: String,
+    comments: [CommentSchema],
   },
   {
     timestamps: true,
